@@ -1,0 +1,64 @@
+{
+	"defaultParams": {
+		"renderMode": 0,
+		"enhancementK": 0.0,
+		"enhancementLOD": 1.0,
+		"brightness": 2.0,
+		"gamma": 2.0
+	},
+	"baseOptions": [
+		{
+			"name": "Layer 1",
+			"info": "<p>This is just an example of a possible layer.</p>",
+			"layer": 0
+		},
+		{
+			"name": "Layer 2",
+			"info": "<p>This is just another example of another possible layer.</p>",
+			"layer": 1
+		}
+	],
+	"lensOptions": [
+		{
+			"name": "Achromatic with enhanced geometry",
+			"info": "<p>Layer without chromatic information, that visualizes the relighted surface by only using the shape information (i.e., the normal map layer), and the virtual light manually choosen by the user. An enhancing operator has been applied to provide a non-photorealistic/illustrative rendering that increases the perception of geometric behaviour across the object surface. This visualization allows for a pure geometric inspection of micro/meso/macro surface details.</p>",
+			"layer": 0,
+			"params": {
+				"renderMode": 1,
+				"enhancementK": 2.27,
+				"enhancementLOD": 2.66,
+				"brightness": 2.22
+			}
+		},
+		{
+			"name": "Normal map",
+			"info": "<p>Layer with the color coded normal map field, which is useful to inspect the pure geometric surface behaviour. An enhancing operator has been applied to increase the perception of micro/meso/macro changes of normal signal across the surface.</p>",
+			"layer": 0,
+			"params": {
+				"renderMode": 3,
+				"enhancementK": 2.0,
+				"enhancementLOD": 2.86,
+				"brightness": 3.14
+			}
+		},
+		{
+			"name": "Visible specular lighting (x2)",
+			"info": "<p>This option visualizes only the diffuse (Lambertian) component of the Ward model used to represent the spatially-varying object material.</p>",
+			"layer": 0,
+			"params": {
+				"renderMode": 5,
+				"brightness": 5
+			}
+		},
+		{
+			"name": "Layer 1",
+			"info": "<p>This is just an example of a possible layer.</p>",
+			"layer": 0
+		},
+		{
+			"name": "Layer 2",
+			"info": "<p>This is just another example of another possible layer.</p>",
+			"layer": 1
+		}
+	]
+}

@@ -1,0 +1,50 @@
+{
+    "name":"Test",
+    "info": "Test",
+    "dimensions": [2048, 1280],
+    "rti_shader": {
+        "type": "SVBRDF",
+        "alphaLimits": [0.01, 0.5],
+        "inputColorSpace": "linear"
+    },
+    "layers": [
+        {
+            "name": "Layer 1",
+            "maps": {
+        		"normals": "normals.jpg",
+                "kd": "layer1/kd.jpg",
+                "ks": "layer1/ks.jpg",
+	        	"gloss": "layer1/gloss.jpg"
+            },
+            "annotations": {
+                "file_prefix": "annot/annot",
+                "file_postfix": ".png",
+                "n": 3,
+                "infos": [
+                    ["First level of annotations", "<p>A description of the layer with HTML embed.</p>"],
+                    ["Second level of annotations", "<p>A description of the layer with HTML embed.</p>"],
+                    ["Third level of annotations", "<p>A description of the layer with HTML embed.</p>"]
+                ]
+            }
+        },
+        {
+            "name": "Layer 2",
+            "maps": {
+        		"normals": "normals.jpg",
+                "kd": "layer2/kd.jpg",
+                "ks": "layer2/ks.jpg",
+	        	"gloss": "layer2/gloss.jpg"
+            },
+            "annotations": {
+                "file_prefix": "annot/annot",
+                "file_postfix": ".png",
+                "n": 3,
+                "infos": [
+                    ["First level of annotations", "<p>A description of the layer with HTML embed.</p>"],
+                    ["Second level of annotations", "<p>A description of the layer with HTML embed.</p>"],
+                    ["Third level of annotations", "<p>A description of the layer with HTML embed.</p>"]
+                ]
+            }
+        }
+    ]
+}
