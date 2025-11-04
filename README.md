@@ -8,7 +8,7 @@ BRDF picking, geometry enhancement, achromatic rendering, etc. and it is complet
 configurable. It supports both mouse and touch input, and it is able to adapt its
 layout to multiple devices (such smartphones, tablets, desktops, etc.).
 
-Check out the **[ON-LINE DEMO](https:\\albertojaspe.net\demos\marlie)**.
+Check out the **[ON-LINE DEMO](https://albertojaspe.net/demos/marlie)**.
 
 ## Publications
 
