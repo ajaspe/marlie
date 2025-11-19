@@ -1,42 +1,42 @@
 # M.A.RL.I.E (Multilayered Annotated ReLighting Images Explorer)
 
-M.A.RL.I.E is a web software that allows real-time exploration of multiple-layered,
+**M.A.RL.I.E.** is a web software that allows real-time exploration of multiple-layered,
 image-based objects. They can have a geometric description and be dynamically
 relighted using an analytical material-light interaction model called Ward.
-Moreover, it support multiresolution annotations, lens methafor for inspection,
-BRDF picking, geometry enhancement, achromatic rendering, etc. and it is completly
+Moreover, it supports multiresolution annotations, lens metaphor for inspection,
+BRDF picking, geometry enhancement, achromatic rendering, etc. and it is completely
 configurable. It supports both mouse and touch input, and it is able to adapt its
-layout to multiple devices (such smartphones, tablets, desktops, etc.).
+layout to multiple devices (suchas  smartphones, tablets, desktops, etc.).
 
-Check out the **[ON-LINE DEMO](https://albertojaspe.net/demos/marlie)**.
+Check out the **[🖼️ON-LINE DEMO 🖼️](https://albertojaspe.net/demos/marlie)**.
 
 ## Publications
 
-M.A.RL.I.E is as well a demostrative software of the papers:
+M.A.RL.I.E is also a demonstrative software of the papers:
 
-* [Web-based Multi-layered Explorationof Annotated Image-based Shape and Material Models](https://albertojaspe.net/publications/2019-GCH-marlie.html)  
+* [📄 Web-based Multi-layered Exploration of Annotated Image-based Shape and Material Models](https://albertojaspe.net/publications/2019-GCH-marlie.html)  
 by Alberto Jaspe-Villanueva, Ruggero Pintus, Andrea Giachetti, and Enrico Gobbetti.  
-Presented at EuroGraohics Workshop of Graphics for Cultural Heritage 2019.
+Presented at the EuroGraphics Workshop of Graphics for Cultural Heritage 2019.
 
-* [Web-based Exploration of Annotated Multi-Layered Relightable Image Models](https://albertojaspe.net/publications/2021-JOCCH-marlie.html)  
+* [📄 Web-based Exploration of Annotated Multi-Layered Relightable Image Models](https://albertojaspe.net/publications/2021-JOCCH-marlie.html)  
 by Alberto Jaspe-Villanueva, Moonisa Ahsan, Ruggero Pintus, Andrea Giachetti, Fabio Marton, and Enrico Gobbetti.  
 Extension of the first one on the ACM Journal of Computing and Cultural Heritage, May 2021.
 
 ## Installation & requirements
 
-This software is written in Javascript ES6 and HTML5. It is intended to be run in a modern web browser. It uses [Bootstrap](https://getbootstrap.com/) for the interface, [gl-matrix](http://glmatrix.net) for some of the maths and WebGL2 for the rendering. It uses JSON files for its configuration, and it is distributed with a test dataset in order to illustrate its use. It requires a web server and a modern web browser (such as Chrome or Firefox) to run, as well as a graphic card with OpenGL ES 3.0 capabilities.
+This software is written in JavaScript ES6 and HTML5. It is intended to be run in a modern web browser. It uses [Bootstrap](https://getbootstrap.com/) for the interface, [gl-matrix](http://glmatrix.net) for some of the maths, and WebGL2 for the rendering. It uses JSON files for its configuration, and it is distributed with a test dataset in order to illustrate its use. It requires a web server and a modern web browser (such as Chrome or Firefox) to run, as well as a graphics card with OpenGL ES 3.0 capabilities.
 
 ## URL parameters
 * `advanced=[0,1]` for the switch to the advanced interface
-* `ds=dataset_path` for poiting directly to one dataset of the ddbb
-* `dsdb=db_path` to point a different dataset DB JSON config file (default is "datasets_db.json")
+* `ds=dataset_path` for pointing directly to one dataset of the ddbb
+* `dsdb=db_path` to point to a different dataset DB JSON config file (default is "datasets_db.json")
 
 Example: `http://myserver.net/marlie/?advanced=1&ds=data/ghiberti_ptm&dsdb=custom_db.json`
 
 ## Annotation pyramid builder
-A tool for building the annotation pyramid is provided within the package. It uses NodeJS and requires the jimp package. It takes a set of transparent annotation patches in a directory, with the specifical filename convention `level_x_y_width_height_descript.png` and creates the pyramid inside another directory. It requires the original resolution sizes of the datasets. Read the paper for more details.
+A tool for building the annotation pyramid is provided within the package. It uses NodeJS and requires the jimp package. It takes a set of transparent annotation patches in a directory, with the specific filename convention `level_x_y_width_height_descript.png` and creates the pyramid inside another directory. It requires the original resolution sizes of the datasets. Read the paper for more details.
 
-For setting it up, run `npm install` inside the tool directory (tools/annot_builder). Run it without arguments for see the options:
+For setting it up, run `npm install` inside the tool directory (tools/annot_builder). Run it without arguments to see the options:
 
 Usage: `node annot_builder patchsFolder outputFolder fullWidth fullHeight`
 filename format: `level_x_y_width_height_descript.png` (coords ref to full size)
@@ -46,10 +46,10 @@ filename format: `level_x_y_width_height_descript.png` (coords ref to full size)
 Every layer has a set of images that define its properties, and all of them must have the same dimensions.
 
 ### SVBRDF Ward model
-The shape of the object is defined with a normal map, encoded as an RGB image so that N = 2 * (RGB) - vec3(1). The resulting vector N must be unitary, otherwise that pixel will be discarded.
+The shape of the object is defined with a normal map, encoded as an RGB image so that N = 2 * (RGB) - vec3(1). The resulting vector N must be unitary; otherwise, that pixel will be discarded.
 
 The appearance of the object is defined by three maps, which encode the following parameters of a Ward BRDF model:
- * `kd`: albedo, encoded with RGB, linear or sRGB.
+ * `kd`: albedo, encoded with RGB, linear, or sRGB.
  * `ks`: specular color, encoded with RGB, linear or sRGB.
  * `gloss`: a glossiness parameter, encoded with one channel (RGB valid too, will take only the Red channel). It is transformed to the alpha parameter of the original Ward formula using the following function.
  * 
@@ -80,7 +80,7 @@ The layer maps for this type of model is configured this way:
 	}
 
 ### LRGB PTM model
-[Polynomial Texture Maps](https://www.hpl.hp.com/research/ptm/papers/ptm.pdf) are supported in its LRGB format. The rti_shader for this type of model is configured this way:
+[Polynomial Texture Maps](https://www.hpl.hp.com/research/ptm/papers/ptm.pdf) are supported in their LRGB format. The rti_shader for this type of model is configured this way:
 
 	"rti_shader": {
 		"type": "LRGB_PTM",
@@ -98,10 +98,10 @@ The layer maps for this type of model is configured this way:
 	}
 
 ### Annotations
-For the multiresolution annotation, we use an image pyramid. The base has the same resolution of the other maps, while for the upper levels, the height and width of each image is the half of the previous level. There is no need to define the whole set of images, and you can define how many levels are present. The image file for each level is expected to be named `file_name = ${file_prefix}${level}${file_postfix}`, where the prefix and postfix are defined in the configuration file, and the level starts at zero. You must also define a set of tuples (`title`, `info`) that define the text displayed when an annotation is rendered.
+For the multiresolution annotation, we use an image pyramid. The base has the same resolution as the other maps, while for the upper levels, the height and width of each image is half of the previous level. There is no need to define the whole set of images, and you can define how many levels are present. The image file for each level is expected to be named `file_name = ${file_prefix}${level}${file_postfix}`, where the prefix and postfix are defined in the configuration file, and the level starts at zero. You must also define a set of tuples (`title`, `info`) that define the text displayed when an annotation is rendered.
 
 ### Config file
-Every dataset have also a configuration file called "viewer_config.json" that defines presets (or "option") to be shown, both for the base render and for the lens.
+Every dataset has also a configuration file called "viewer_config.json" that defines presets (or "options") to be shown, both for the base render and for the lens.
 
 	{
 		"name":"Test",
@@ -154,7 +154,7 @@ In the root folder you can find a configuration file called "datasets_db.json" w
 	}
 
 ### Presets per dataset
-Each dataset has also a configuration file called `viewer_config.json` that defines presets (or "option") to be shown, both for the base render and for the lens. These options are combinations of one layer with some render parameters. The layer is defined with its position in the datasets's config.json file, starting with zero. Moreover, some parameters can be set as default for all the options, and can be overwritten inside every preset.
+Each dataset also has a configuration file called `viewer_config.json` that defines presets (or "options") to be shown, both for the base render and for the lens. These options are combinations of one layer with some render parameters. The layer is defined with its position in the dataset's config.json file, starting with zero. Moreover, some parameters can be set as default for all the options, and can be overwritten inside every preset.
 
 The render parameters currently supported are:
 
@@ -167,7 +167,7 @@ The render parameters currently supported are:
 	* `5`: Only specular lighting (`(ks * ward) * NdotL)`)
 * `enhancementK`: amount of geometry enhancement [>0]
 * `enhancementLOD`: radius of neighborhood to compute [1-10]
-* `brightness`: multiplyer of final pixel value [>0]
+* `brightness`: multiplier of final pixel value [>0]
 * `gamma`: gamma exponent correction (normally 2.2)
 
 This is an example "viewer_config.json" file for a dataset:
@@ -245,4 +245,4 @@ This project has been developed at the Visual Computing Group, CRS4.
 The project received funding from Sardinian Regional Authorities under projects VIGECLAB and TDM (POR FESR 2014-2020 Action 1.2.2)
 
 ## Contact
-For technical details or bug reports contact Alberto Jaspe at ajaspe@gmail.com.
+For technical details or bug reports, contact Alberto Jaspe at ajaspe@gmail.com.
