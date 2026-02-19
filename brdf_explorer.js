@@ -5,15 +5,15 @@ class BRDFExplorer {
 
 	constructor(canvas) {
 		this.canvas = canvas;
-		this.canvasCtx = canvas.getContext('2d');
+		this.canvasCtx = canvas.getContext('2d', { willReadFrequently: true });
 		this.imgData = this.canvasCtx.getImageData(0,0,this.canvas.width,this.canvas.height);
 
 		this.canvasGloss = document.createElement('canvas');
-		this.canvasGlossCtx = this.canvasGloss.getContext('2d');
+		this.canvasGlossCtx = this.canvasGloss.getContext('2d', { willReadFrequently: true });
 		this.canvasKd = document.createElement('canvas');
-		this.canvasKdCtx = this.canvasKd.getContext('2d');
+		this.canvasKdCtx = this.canvasKd.getContext('2d', { willReadFrequently: true });
 		this.canvasKs = document.createElement('canvas');
-		this.canvasKsCtx = this.canvasKs.getContext('2d');
+		this.canvasKsCtx = this.canvasKs.getContext('2d', { willReadFrequently: true });
 		this.clear();
 		this.canvasCtx.font = "12px Arial";
 		this.canvasCtx.fillStyle = "White";

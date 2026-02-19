@@ -279,8 +279,7 @@ function initUI() {
 				currentDataset.getImage(viewerConfig.baseOptions[currentBaseOpt].layer, "kd"),
 				currentDataset.getImage(viewerConfig.baseOptions[currentBaseOpt].layer, "ks"),
 				);
-			brdfExplorer.alphaLimits = currentDataset.config.alphaLimits;
-			console.log(currentDataset.config.alphaLimits);
+			brdfExplorer.alphaLimits = currentDataset.config.alphaLimits || currentDataset.config.rti_shader.alphaLimits;
 			brdfExplorerCanvas.style.visibility = "visible";
 		} else {
 			brdfExplorerCanvas.style.visibility = "hidden";
