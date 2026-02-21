@@ -39,7 +39,7 @@ class Renderer {
 		this.stdShaderFragWebGL2Src = "#version 300 es \n precision highp float; \n precision highp int; \n in vec2 vTexCoord; \n out vec4 fragColor; \n void main() { fragColor = vec4(gl_FragCoord.xy/1024.0, 0.0, 1.0); }";
 		
 		try {
-			this.gl = this.canvas.getContext("webgl2", { antialias: false, FXAA: false, premultipliedAlpha: false });
+			this.gl = this.canvas.getContext("webgl2", { antialias: false, FXAA: false, premultipliedAlpha: false, preserveDrawingBuffer: true });
 		} catch (e) {
 			alert("You browser is not webgl compatible :(");
 			return false;

@@ -1,3 +1,7 @@
 { 	
+	"Demetrios": "datasets\\demetrios",
+	"Ghiberti": "datasets\\ghiberti",
+	"Fattori": "datasets\\fattori",
+	"Monteprama": "datasets\\monteprama",
 	"MARLIE Test Dataset": "datasets\\test"
 }

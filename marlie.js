@@ -266,6 +266,79 @@ function initUI() {
 	}, false);
 
 
+	// AI Stuff
+	const aiService = new AIService();
+
+	async function updateModelList() {
+		const models = await aiService.getModels();
+		const select = document.getElementById('aiModelSelect');
+		select.innerHTML = '';
+		models.forEach(m => {
+			const option = document.createElement('option');
+			option.value = m;
+			option.text = m.replace('models/', '');
+			select.appendChild(option);
+		});
+		if(models.length > 0) select.value = "models/gemini-1.5-flash"; // Default
+	}
+
+	document.getElementById('askAIButton').addEventListener('click', function() {
+		if (aiService.hasApiKey()) {
+			document.getElementById('aiKeyInputSection').style.display = 'none';
+			document.getElementById('aiInteractionSection').style.display = 'block';
+			updateModelList();
+		} else {
+			document.getElementById('aiKeyInputSection').style.display = 'block';
+			document.getElementById('aiInteractionSection').style.display = 'none';
+		}
+		$('#aiModal').modal('show');
+		
+		// Update preview
+		const imageData = canvas.toDataURL("image/png");
+		document.getElementById('aiImagePreview').src = imageData;
+		
+		doFrame = true;
+	});
+
+	document.getElementById('saveKeyButton').addEventListener('click', function() {
+		const key = document.getElementById('geminiKeyInput').value;
+		if (key) {
+			aiService.saveApiKey(key);
+			document.getElementById('aiKeyInputSection').style.display = 'none';
+			document.getElementById('aiInteractionSection').style.display = 'block';
+			updateModelList();
+		} else {
+			alert('Please enter a valid key');
+		}
+	});
+
+	document.getElementById('sendToAIButton').addEventListener('click', async function() {
+		const prompt = document.getElementById('aiPromptInput').value;
+		document.getElementById('aiLoading').style.display = 'block';
+		document.getElementById('aiResult').innerHTML = '';
+		document.getElementById('sendToAIButton').disabled = true;
+
+		try {
+			const imageData = canvas.toDataURL("image/png");
+			const model = document.getElementById('aiModelSelect').value;
+			const result = await aiService.analyzeImage(imageData, prompt, model);
+			document.getElementById('aiResult').innerHTML = marked.parse(result);
+		} catch (e) {
+			document.getElementById('aiResult').innerHTML = `<p style="color:red">Error: ${e.message}</p>`;
+		} finally {
+			document.getElementById('aiLoading').style.display = 'none';
+			document.getElementById('sendToAIButton').disabled = false;
+		}
+	});
+
+	document.getElementById('changeKeyButton').addEventListener('click', function() {
+		aiService.removeApiKey();
+		document.getElementById('geminiKeyInput').value = '';
+		document.getElementById('aiKeyInputSection').style.display = 'block';
+		document.getElementById('aiInteractionSection').style.display = 'none';
+	});
+
+
 	$('#interactionMode').change(function() {
 		if($(this).prop('checked')) {
 			currentInteractionState = interactionStates.BRDF_EXPLORER;
@@ -279,8 +352,7 @@ function initUI() {
 				currentDataset.getImage(viewerConfig.baseOptions[currentBaseOpt].layer, "kd"),
 				currentDataset.getImage(viewerConfig.baseOptions[currentBaseOpt].layer, "ks"),
 				);
-			brdfExplorer.alphaLimits = currentDataset.config.alphaLimits;
-			console.log(currentDataset.config.alphaLimits);
+			brdfExplorer.alphaLimits = currentDataset.config.rti_shader.alphaLimits;
 			brdfExplorerCanvas.style.visibility = "visible";
 		} else {
 			brdfExplorerCanvas.style.visibility = "hidden";
