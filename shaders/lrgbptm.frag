@@ -76,7 +76,8 @@ void main() {
 	vec3 chroma  = texture(uTexCoeff_6_7_8, vTexCoord).xyz;
 	// TODO DISCARD PIXELS
 
-	vec3 L = (uLightInfo.w == 0.0) ? normalize(uLightInfo.xyz) : normalize(uLightInfo.xyz - gl_FragCoord.xyz);
+	vec3 L = (uLightInfo.w == 0.0) ? normalize(uLightInfo.xyz) : normalize(gl_FragCoord.xyz - uLightInfo.xyz);
+
 
 	if(uEnhancementParams[0] > 0.001) {
 		coeff012 = coeff012 + uEnhancementParams.x * (coeff012 - textureLod(uTexCoeff_0_1_2, vTexCoord,  uEnhancementParams.y).xyz);
@@ -98,16 +99,14 @@ void main() {
 
 	vec3 linearColor = chroma * lum;
 	
-	bool doRenderCorrections = true;
+	bool doRenderCorrections = false; // Normally PTM has the corrections baked in
 
 	if (uRenderMode == 1) { // Albedo
 		linearColor = chroma;
 	} else if (uRenderMode == 2) {
 		linearColor = vec3(lum);
-		doRenderCorrections = false;
 	} else if (uRenderMode == 3) {
 		linearColor = texture(uTexNormals, vTexCoord).xyz;
-		doRenderCorrections = false;
 	} else if (uRenderMode == 4) {
 		vec3 N;
 		float nDiv = ((4.0 * coeff012.x * coeff012.y) - (coeff012.z * coeff012.z));
@@ -116,13 +115,12 @@ void main() {
 		N.z = sqrt(1.0 - N.x*N.x - N.y*N.y);
 		N = normalize(N);
 		linearColor = (N*.5)+vec3(.5);
-		doRenderCorrections = false;
 	} 
 
 
 
 	vec3 finalColor = doRenderCorrections ? pow(linearColor * uRenderCorrections.x, vec3(1.0/uRenderCorrections.y)) : linearColor;
-
+//finalColor = L.xyz;
 	if(uDrawAnnotations) {
 		vec4 annotColor = texture(uTexAnnot, vTexCoord);
 		finalColor = (1.-annotColor.w) * finalColor + annotColor.w * annotColor.xyz;

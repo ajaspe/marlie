@@ -49,7 +49,7 @@
 		rel="stylesheet">
 	<script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.4.0/js/bootstrap4-toggle.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/gl-matrix/2.6.1/gl-matrix-min.js"></script>
-	<script src="drawingboard.js"></script>        
+	<script src="drawingboard.js"></script>
 	<link href="drawingboard.css" rel="stylesheet">
 
 	<script src="renderer.js"></script>
@@ -60,183 +60,231 @@
 	<script src="marlie.js"></script>
 	<link rel="stylesheet" href="marlie.css" type="text/css" media="screen">
 
-	
+
 	<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 	<script src="ai_service.js"></script>
-	
+
 </head>
 
 <body onload="main('webglCanvas')">
 
-		<!-- DRAW CANVAS -->
-		<div hidden id="drawDiv" style="position: fixed; left: 0; top: 0; width:100%; height:100%; z-index: 100;"></div>
+	<!-- DRAW CANVAS -->
+	<div hidden id="drawDiv" style="position: fixed; left: 0; top: 0; width:100%; height:100%; z-index: 100;"></div>
 
-		<div style="height:100%;">
+	<div style="height:100%; position: relative;">
 		<!-- MAIN CANVAS -->
-		<canvas id='webglCanvas' style="background-color: rgb(0,0,0); width: 100%; height: 100%; display:block; pointer-events:all;"></canvas>
+		<canvas id='webglCanvas'
+			style="background-color: rgb(0,0,0); width: 100%; height: 100%; display:block; pointer-events:all;"></canvas>
+		<div id="aiAnnotationsOverlay"
+			style="position: absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none; z-index: 5;">
+		</div>
 
 		<span id="UI">
-		<!-- TOOLBOX -->
-		<div style="position: absolute; width: 128px; right: 10px; top: 56px; z-index: 10;">
-			<input id="interactionMode" type="checkbox" checked data-toggle="toggle" data-on="BRDF Picker" data-off="Relighting" data-onstyle="warning" data-offstyle="primary" data-size="xs" data-width="100%" style="width: 100%; text-align:center;">
-			<canvas id='brdfExplorer' width="128" height="128" style="position: absolute; top:30px; right:0px; visibility: hidden; border:2px solid #888888;"></canvas>
-			<canvas id='dlCanvas' width="128" height="128" style="position: absolute; top:60px; right:0px; visibility: hidden;"></canvas>
-			<div id='lightTypeDiv' style='visibility: visible;'><input id='lightType' type="checkbox" data-toggle="toggle" data-on="Spot" data-off="Directional" data-onstyle="warning" data-offstyle="primary" data-size="xs" data-style=" border-radius: 20px;" data-width="100%" style="width: 100%; text-align:center; top:30px;"></div>
-			<input id='slHeight' class="range vertical-heighest-first round" style="position: absolute; right:-3px; width:100%; top:120px; visibility: hidden;" type="range" min="10" max="200" value="80" step="1">
-		</div>
-
-		<!-- INFO TOP BAR -->
-		<div id="infoDiv" style="position: absolute; width:100%; height:54px; right:0px; top: 0px; z-index: 10; background:rgba(1,1,1,0.5); overflow-y:hidden;">
-			<p style="text-align:center; margin-left:56px; margin-top: 5px; font-size:13px; color:white !important; line-height: 1.2;"><a id="info" href="#" style="text-decoration: inherit; color: white !important;"></a></p>
-		</div>
-
-		<!-- FULLSCREEN -->
-		<div style="position: absolute; width: 50px; left:4px; top: 6px; z-index: 10; text-align:center;">
-			<input id="fullScreen" type="checkbox" checked data-toggle="toggle" data-on="FS" data-off="Win" data-onstyle="primary" data-offstyle="warning" data-size="sm" data-width="10%">
-		</div>
-
-		<!-- MENU -->
-		<div id="main" class="main">
-			<br>
-			<div class="dropdown">
-				<button class="btn btn-danger btn-sm dropdown-toggle" type="button" id="datasetsDropdownMenuButton"
-					data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-					style="width:100%; margin-bottom:10px;">
-					Datasets
-				</button>
-				<div id="datasetsOptions" class="dropdown-menu" aria-labelledby="datasetsDropdownMenuButton"></div>
+			<!-- TOOLBOX -->
+			<div style="position: absolute; width: 128px; right: 10px; top: 56px; z-index: 10;">
+				<input id="interactionMode" type="checkbox" checked data-toggle="toggle" data-on="BRDF Picker"
+					data-off="Relighting" data-onstyle="warning" data-offstyle="primary" data-size="xs"
+					data-width="100%" style="width: 100%; text-align:center;">
+				<canvas id='brdfExplorer' width="128" height="128"
+					style="position: absolute; top:30px; right:0px; visibility: hidden; border:2px solid #888888;"></canvas>
+				<canvas id='dlCanvas' width="128" height="128"
+					style="position: absolute; top:60px; right:0px; visibility: hidden;"></canvas>
+				<div id='lightTypeDiv' style='visibility: visible;'><input id='lightType' type="checkbox"
+						data-toggle="toggle" data-on="Spot" data-off="Directional" data-onstyle="warning"
+						data-offstyle="primary" data-size="xs" data-style=" border-radius: 20px;" data-width="100%"
+						style="width: 100%; text-align:center; top:30px;"></div>
+				<input id='slHeight' class="range vertical-heighest-first round"
+					style="position: absolute; right:-3px; width:100%; top:120px; visibility: hidden;" type="range"
+					min="10" max="200" value="80" step="1">
 			</div>
-			<div id="simpleInterface">
-				<div class="dropdown" style="width:100%;">
-					<button class="btn btn-success btn-sm dropdown-toggle" type="button" id="baseLayerDropdownMenuButton"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-						style="width:100%; margin-bottom:10px;">
-						Base preset
-					</button>
-					<div id="baseLayerOptions" class="dropdown-menu" aria-labelledby="baseLayerDropdownMenuButton">
-						<center>
-							<input id="baseAnnotations" type="checkbox" data-toggle="toggle" data-on="Annotations ON"
-								data-off="Annotations OFF" data-onstyle="success" data-size="sm" data-width="140">
-						</center>
-						<div class="dropdown-divider"></div>
-					</div>
-				</div>
-				<div  class="dropdown" style="width:100%;">
-					<button class="btn btn-info btn-sm dropdown-toggle" type="button" id="lensLayerDropdownMenuButton"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-						style="width:100%; margin-bottom:10px;">
-						Lens preset
-					</button>
-					<div id="lensLayerOptions" class="dropdown-menu" aria-labelledby="lensLayerDropdownMenuButton">
-						<center>
-							<input id="lensOn" type="checkbox" data-toggle="toggle" data-onstyle="info" data-size="sm">
-							<input id="lensAnnotations" type="checkbox" data-toggle="toggle" data-on="Annotations ON"
-								data-off="Annotations OFF" data-onstyle="info" data-size="sm" data-width="140">
-							<input name="trans" id="lensAlpha" type="range" min="0" max="1" value="1.0" step="0.01" style="width:70%;">
-						</center>
-						<div class="dropdown-divider"></div>
-					</div>
-				</div>
+
+			<!-- INFO TOP BAR -->
+			<div id="infoDiv"
+				style="position: absolute; width:100%; height:54px; right:0px; top: 0px; z-index: 10; background:rgba(1,1,1,0.5); overflow-y:hidden;">
+				<p
+					style="text-align:center; margin-left:56px; margin-top: 5px; font-size:13px; color:white !important; line-height: 1.2;">
+					<a id="info" href="#" style="text-decoration: inherit; color: white !important;"></a>
+				</p>
 			</div>
-			<!-- ADVANCED MENUS -->
-			<div id="advancedInterface" hidden>
-				<div class="dropdown" style="width:100%;">
-					<button class="btn btn-success btn-sm dropdown-toggle" type="button" id="baseLayerCfgDropdownMenuButton"
+
+			<!-- FULLSCREEN -->
+			<div style="position: absolute; width: 50px; left:4px; top: 6px; z-index: 10; text-align:center;">
+				<input id="fullScreen" type="checkbox" checked data-toggle="toggle" data-on="FS" data-off="Win"
+					data-onstyle="primary" data-offstyle="warning" data-size="sm" data-width="10%">
+			</div>
+
+			<!-- MENU -->
+			<div id="main" class="main">
+				<br>
+				<div class="dropdown">
+					<button class="btn btn-danger btn-sm dropdown-toggle" type="button" id="datasetsDropdownMenuButton"
 						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
 						style="width:100%; margin-bottom:10px;">
-						Base layer
+						Datasets
 					</button>
-					<div id="baseLayerCfgOptions" class="dropdown-menu" aria-labelledby="baseLayerDropdownMenuButton" style="width:250px;">
-						<center>
-						<input id="baseAnnotationsCfg" type="checkbox" data-toggle="toggle" data-on="Annotations ON"
-							data-off="Annotations OFF" data-onstyle="info" data-size="sm" data-width="140">
-						Render Mode
-						<input name="RenderMode" id="baseLayerCfgParamRenderMode" type="range" min="0" max="5" value="0" step="1" style="width:90%;">
-						Enhancement K
-						<input name="RenderMode" id="baseLayerCfgParamEnhancementK" type="range" min="0" max="10" value="0" step="0.1" style="width:90%;">
-						Enhancement LOD
-						<input name="RenderMode" id="baseLayerCfgParamEnhancementLOD" type="range" min="1" max="5" value="1" step="0.1" style="width:90%;">
-						Brightness
-						<input name="RenderMode" id="baseLayerCfgParamBrightness" type="range" min="0" max="5" value="1" step="0.1" style="width:90%;">
-						Gamma
-						<input name="RenderMode" id="baseLayerCfgParamGamma" type="range" min="0.1" max="5" value="2" step="0.1" style="width:90%;">
-					</center>
-					<div class="dropdown-divider"></div>
-					</div>
+					<div id="datasetsOptions" class="dropdown-menu" aria-labelledby="datasetsDropdownMenuButton"></div>
 				</div>
-
-				<div class="dropdown" style="width:100%;">
-					<button class="btn btn-info btn-sm dropdown-toggle" type="button" id="lensLayerCfgDropdownMenuButton"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-						style="width:100%; margin-bottom:10px;">
-						Lens layer
-					</button>
-					<div id="lensLayerCfgOptions" class="dropdown-menu" aria-labelledby="lensLayerDropdownMenuButton" style="width:250px;">
-						<center>
-							<input id="lensOnCfg" type="checkbox" data-toggle="toggle" data-onstyle="info" data-size="sm">
-							<input id="lensAnnotationsCfg" type="checkbox" data-toggle="toggle" data-on="Annotations ON"
-								data-off="Annotations OFF" data-onstyle="info" data-size="sm" data-width="140">
-							<input name="trans" id="lensAlphaCfg" type="range" min="0" max="1" value="1.0" step="0.01" style="width:90%;">
-
-						Render Mode
-						<input name="RenderMode" id="lensLayerCfgParamRenderMode" type="range" min="0" max="5" value="0" step="1" style="width:90%;">
-						Enhancement K
-						<input name="RenderMode" id="lensLayerCfgParamEnhancementK" type="range" min="0" max="10" value="0" step="0.1" style="width:90%;">
-						Enhancement LOD
-						<input name="RenderMode" id="lensLayerCfgParamEnhancementLOD" type="range" min="1" max="5" value="1" step="0.1" style="width:90%;">
-						Brightness
-						<input name="RenderMode" id="lensLayerCfgParamBrightness" type="range" min="0" max="5" value="1" step="0.1" style="width:90%;">
-						Gamma
-						<input name="RenderMode" id="lensLayerCfgParamGamma" type="range" min="0.1" max="5" value="2" step="0.1" style="width:90%;">
-					</center>
-					<div class="dropdown-divider"></div>
-					</div>
-				</div>
-
-
-				<div class="dropdown" style="width:100%;">
-					<button class="btn btn-warning btn-sm dropdown-toggle" type="button" id="toolboxDropdownMenuButton"
-						data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-						style="width:100%; margin-bottom:10px;">
-						Toolbox
-					</button>
-					<div id="toolbox" class="dropdown-menu" aria-labelledby="toolboxDropdownMenuButton" style="width:160px;">
-						<center>
-							<input type="button" class="btn btn-primary btn-sm" id="getJSONPresetButton" style="width:90%;" value="Get Preset">
+				<div id="simpleInterface">
+					<div class="dropdown" style="width:100%;">
+						<button class="btn btn-success btn-sm dropdown-toggle" type="button"
+							id="baseLayerDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false" style="width:100%; margin-bottom:10px;">
+							Base preset
+						</button>
+						<div id="baseLayerOptions" class="dropdown-menu" aria-labelledby="baseLayerDropdownMenuButton">
+							<center>
+								<input id="baseAnnotations" type="checkbox" data-toggle="toggle"
+									data-on="Annotations ON" data-off="Annotations OFF" data-onstyle="success"
+									data-size="sm" data-width="140">
+							</center>
 							<div class="dropdown-divider"></div>
-							Annotation tools
-							<input type="button" class="btn btn-success btn-xs" id="getScreenshotButton" style="width:80%;" value="ScreenShot">
-							<input type="button" class="btn btn-success	 btn-xs" id="createAnnotationButton" style="width:80%;" value="Annotate">
+						</div>
+					</div>
+					<div class="dropdown" style="width:100%;">
+						<button class="btn btn-info btn-sm dropdown-toggle" type="button"
+							id="lensLayerDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false" style="width:100%; margin-bottom:10px;">
+							Lens preset
+						</button>
+						<div id="lensLayerOptions" class="dropdown-menu" aria-labelledby="lensLayerDropdownMenuButton">
+							<center>
+								<input id="lensOn" type="checkbox" data-toggle="toggle" data-onstyle="info"
+									data-size="sm">
+								<input id="lensAnnotations" type="checkbox" data-toggle="toggle"
+									data-on="Annotations ON" data-off="Annotations OFF" data-onstyle="info"
+									data-size="sm" data-width="140">
+								<input name="trans" id="lensAlpha" type="range" min="0" max="1" value="1.0" step="0.01"
+									style="width:70%;">
+							</center>
 							<div class="dropdown-divider"></div>
-							AI Tools
-							<input type="button" class="btn btn-info btn-xs" id="askAIButton" style="width:80%;" value="Ask AI">
-						</center>
+						</div>
 					</div>
 				</div>
+				<!-- ADVANCED MENUS -->
+				<div id="advancedInterface" hidden>
+					<div class="dropdown" style="width:100%;">
+						<button class="btn btn-success btn-sm dropdown-toggle" type="button"
+							id="baseLayerCfgDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false" style="width:100%; margin-bottom:10px;">
+							Base layer
+						</button>
+						<div id="baseLayerCfgOptions" class="dropdown-menu"
+							aria-labelledby="baseLayerDropdownMenuButton" style="width:250px;">
+							<center>
+								<input id="baseAnnotationsCfg" type="checkbox" data-toggle="toggle"
+									data-on="Annotations ON" data-off="Annotations OFF" data-onstyle="info"
+									data-size="sm" data-width="140">
+								Render Mode
+								<input name="RenderMode" id="baseLayerCfgParamRenderMode" type="range" min="0" max="5"
+									value="0" step="1" style="width:90%;">
+								Enhancement K
+								<input name="RenderMode" id="baseLayerCfgParamEnhancementK" type="range" min="0"
+									max="10" value="0" step="0.1" style="width:90%;">
+								Enhancement LOD
+								<input name="RenderMode" id="baseLayerCfgParamEnhancementLOD" type="range" min="1"
+									max="5" value="1" step="0.1" style="width:90%;">
+								Brightness
+								<input name="RenderMode" id="baseLayerCfgParamBrightness" type="range" min="0" max="5"
+									value="1" step="0.1" style="width:90%;">
+								Gamma
+								<input name="RenderMode" id="baseLayerCfgParamGamma" type="range" min="0.1" max="5"
+									value="2" step="0.1" style="width:90%;">
+							</center>
+							<div class="dropdown-divider"></div>
+						</div>
+					</div>
+
+					<div class="dropdown" style="width:100%;">
+						<button class="btn btn-info btn-sm dropdown-toggle" type="button"
+							id="lensLayerCfgDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false" style="width:100%; margin-bottom:10px;">
+							Lens layer
+						</button>
+						<div id="lensLayerCfgOptions" class="dropdown-menu"
+							aria-labelledby="lensLayerDropdownMenuButton" style="width:250px;">
+							<center>
+								<input id="lensOnCfg" type="checkbox" data-toggle="toggle" data-onstyle="info"
+									data-size="sm">
+								<input id="lensAnnotationsCfg" type="checkbox" data-toggle="toggle"
+									data-on="Annotations ON" data-off="Annotations OFF" data-onstyle="info"
+									data-size="sm" data-width="140">
+								<input name="trans" id="lensAlphaCfg" type="range" min="0" max="1" value="1.0"
+									step="0.01" style="width:90%;">
+
+								Render Mode
+								<input name="RenderMode" id="lensLayerCfgParamRenderMode" type="range" min="0" max="5"
+									value="0" step="1" style="width:90%;">
+								Enhancement K
+								<input name="RenderMode" id="lensLayerCfgParamEnhancementK" type="range" min="0"
+									max="10" value="0" step="0.1" style="width:90%;">
+								Enhancement LOD
+								<input name="RenderMode" id="lensLayerCfgParamEnhancementLOD" type="range" min="1"
+									max="5" value="1" step="0.1" style="width:90%;">
+								Brightness
+								<input name="RenderMode" id="lensLayerCfgParamBrightness" type="range" min="0" max="5"
+									value="1" step="0.1" style="width:90%;">
+								Gamma
+								<input name="RenderMode" id="lensLayerCfgParamGamma" type="range" min="0.1" max="5"
+									value="2" step="0.1" style="width:90%;">
+							</center>
+							<div class="dropdown-divider"></div>
+						</div>
+					</div>
+
+
+					<div class="dropdown" style="width:100%;">
+						<button class="btn btn-warning btn-sm dropdown-toggle" type="button"
+							id="toolboxDropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+							aria-expanded="false" style="width:100%; margin-bottom:10px;">
+							Toolbox
+						</button>
+						<div id="toolbox" class="dropdown-menu" aria-labelledby="toolboxDropdownMenuButton"
+							style="width:160px;">
+							<center>
+								<input type="button" class="btn btn-primary btn-sm" id="getJSONPresetButton"
+									style="width:90%;" value="Get Preset">
+								<div class="dropdown-divider"></div>
+								Annotation tools
+								<input type="button" class="btn btn-success btn-xs" id="getScreenshotButton"
+									style="width:80%;" value="ScreenShot">
+								<input type="button" class="btn btn-success	 btn-xs" id="createAnnotationButton"
+									style="width:80%;" value="Annotate">
+								<div class="dropdown-divider"></div>
+								AI Tools
+								<input type="button" class="btn btn-info btn-xs" id="askAIButton" style="width:80%;"
+									value="Ask AI">
+							</center>
+						</div>
+					</div>
+
+				</div>
+
 
 			</div>
 
+			<div id="loading"
+				style="position: absolute; width: 10%; height: 10%; left: 50%; top: 50%; margin-left:-5%; margin-top:-5%; z-index: 10;">
+				<img width="100%" src="img/loading.gif"></img>
+			</div>
 
-		</div>
+			<div
+				style="position: absolute; width: 50px; height: 20px; text-align: right; right: 4px; top: 2px; z-index: 10;">
+				<font id="fps" size="3" color="white" style="text-shadow: 2px 2px #000;"></font>
+			</div>
 
-		<div id="loading"
-			style="position: absolute; width: 10%; height: 10%; left: 50%; top: 50%; margin-left:-5%; margin-top:-5%; z-index: 10;">
-			<img width="100%" src="img/loading.gif"></img>
-		</div>
-
-		<div style="position: absolute; width: 50px; height: 20px; text-align: right; right: 4px; top: 2px; z-index: 10;">
-			<font id="fps" size="3" color="white" style="text-shadow: 2px 2px #000;"></font>
-		</div>
-		
-		<div style="position: absolute; height: 18px; width: 40%; left:30%; text-align: center; bottom: 10px; z-index: 10;">
-			<a data-toggle="modal" data-target="#infoModal" href="#"><font size="4" style="text-shadow: 2px 2px #000; font-family:Tahoma, Geneva, sans-serif">
-				M.A.RL.I.E.
-			</font></a>
-		</div>
+			<div
+				style="position: absolute; height: 18px; width: 40%; left:30%; text-align: center; bottom: 10px; z-index: 10;">
+				<a data-toggle="modal" data-target="#infoModal" href="#">
+					<font size="4" style="text-shadow: 2px 2px #000; font-family:Tahoma, Geneva, sans-serif">
+						M.A.RL.I.E.
+					</font>
+				</a>
+			</div>
 
 		</span>
 		<!-- Modal -->
-		<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+		<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
+			aria-labelledby="exampleModalLongTitle" aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -253,7 +301,8 @@
 		</div>
 
 		<!-- AI Modal -->
-		<div class="modal fade" id="aiModal" tabindex="-1" role="dialog" aria-labelledby="aiModalTitle" aria-hidden="true">
+		<div class="modal fade" id="aiModal" tabindex="-1" role="dialog" aria-labelledby="aiModalTitle"
+			aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
@@ -265,29 +314,128 @@
 					<div class="modal-body">
 						<div id="aiKeyInputSection">
 							<p>Please enter your Gemini API Key. It will be stored in your browser.</p>
-							<input type="password" id="geminiKeyInput" class="form-control" placeholder="Enter Gemini API Key">
+							<input type="password" id="geminiKeyInput" class="form-control"
+								placeholder="Enter Gemini API Key">
 							<br>
 							<button type="button" id="saveKeyButton" class="btn btn-primary btn-block">Save Key</button>
 						</div>
 						<div id="aiInteractionSection" style="display:none;">
 							<center>
-								<img id="aiImagePreview" style="max-width: 100%; max-height: 200px; border: 1px solid #ccc; margin-bottom: 10px;">
+								<div class="row text-center mb-3">
+									<div class="col-4 mb-3">
+										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
+											<strong>Standard View</strong>
+										</div>
+										<img id="aiImagePreview"
+											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+										<div class="custom-control custom-checkbox mt-2">
+											<input type="checkbox" class="custom-control-input" id="sendRgbToggle"
+												checked>
+											<label class="custom-control-label" for="sendRgbToggle">Send</label>
+										</div>
+									</div>
+									<div class="col-4 mb-3">
+										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
+											<strong>Normal Map</strong>
+										</div>
+										<img id="aiNormalMapPreview"
+											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+										<div class="custom-control custom-checkbox mt-2">
+											<input type="checkbox" class="custom-control-input" id="sendNormalToggle"
+												checked>
+											<label class="custom-control-label" for="sendNormalToggle">Send</label>
+										</div>
+									</div>
+									<div class="col-4 mb-3">
+										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
+											<strong>North Light</strong>
+										</div>
+										<img id="aiNorthPreview"
+											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+										<div class="custom-control custom-checkbox mt-2">
+											<input type="checkbox" class="custom-control-input" id="sendNorthToggle"
+												checked>
+											<label class="custom-control-label" for="sendNorthToggle">Send</label>
+										</div>
+									</div>
+									<div class="col-4 mb-2">
+										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;"><strong>East
+												Light</strong></div>
+										<img id="aiEastPreview"
+											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+										<div class="custom-control custom-checkbox mt-2">
+											<input type="checkbox" class="custom-control-input" id="sendEastToggle"
+												checked>
+											<label class="custom-control-label" for="sendEastToggle">Send</label>
+										</div>
+									</div>
+									<div class="col-4 mb-2">
+										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
+											<strong>South Light</strong>
+										</div>
+										<img id="aiSouthPreview"
+											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+										<div class="custom-control custom-checkbox mt-2">
+											<input type="checkbox" class="custom-control-input" id="sendSouthToggle"
+												checked>
+											<label class="custom-control-label" for="sendSouthToggle">Send</label>
+										</div>
+									</div>
+									<div class="col-4 mb-2">
+										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;"><strong>West
+												Light</strong></div>
+										<img id="aiWestPreview"
+											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+										<div class="custom-control custom-checkbox mt-2">
+											<input type="checkbox" class="custom-control-input" id="sendWestToggle"
+												checked>
+											<label class="custom-control-label" for="sendWestToggle">Send</label>
+										</div>
+									</div>
+								</div>
 							</center>
+							<div class="form-group">
+								<label for="aiCorpusInput">Attach Corpus JSON (optional):</label>
+								<input type="file" id="aiCorpusInput" accept=".json" class="form-control-file">
+							</div>
 							<div class="form-group">
 								<label for="aiModelSelect">Model:</label>
 								<select class="form-control" id="aiModelSelect"></select>
 							</div>
 							<div class="form-group">
 								<label for="aiPromptInput">Prompt:</label>
-								<textarea class="form-control" id="aiPromptInput" rows="2">Analyze this material and describe its visual properties.</textarea>
+								<textarea class="form-control" id="aiPromptInput"
+									rows="2">Analyze this material and describe its visual properties.</textarea>
 							</div>
-							<button type="button" id="sendToAIButton" class="btn btn-success btn-block">Analyze View</button>
+							<button type="button" id="sendToAIButton" class="btn btn-success btn-block">Analyze
+								View</button>
 							<hr>
 							<div id="aiLoading" style="display:none; text-align:center;">
 								<img src="img/loading.gif" height="50px"> Analyzing...
 							</div>
 							<div id="aiResult" style="margin-top:10px; max-height: 300px; overflow-y: auto;"></div>
-							<button type="button" id="changeKeyButton" class="btn btn-outline-secondary btn-sm" style="margin-top:15px; width:100%;">Change API Key</button>
+							<button type="button" id="changeKeyButton" class="btn btn-outline-secondary btn-sm"
+								style="margin-top:15px; width:100%;">Change API Key</button>
+							<hr>
+							<div class="form-group" style="margin-top: 15px;">
+								<label for="aiDebugJsonInput"><small>Debug: Load Manual JSON</small></label>
+								<textarea class="form-control" id="aiDebugJsonInput" rows="2" style="font-size: 0.8rem;"
+									placeholder="Paste Gemini JSON response here to manually draw boxes"></textarea>
+								<button type="button" id="loadDebugJsonButton" class="btn btn-secondary btn-sm"
+									style="margin-top: 5px; width: 100%;">Load Debug JSON</button>
+							</div>
+
+							<hr>
+							<div class="form-group row align-items-center" style="margin-top: 15px;">
+								<div class="col-8">
+									<label for="aiAnnotationsToggle" class="mb-0" style="font-weight:bold;">Show
+										Generated Annotations</label>
+								</div>
+								<div class="col-4 text-right">
+									<input type="checkbox" id="aiAnnotationsToggle" data-toggle="toggle" data-on="ON"
+										data-off="OFF" data-onstyle="success" data-size="sm" checked>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -295,26 +443,37 @@
 		</div>
 
 		<!-- Modal INFO -->
-		<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel" aria-hidden="true">
+		<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+			aria-hidden="true">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-body">
 						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-								<span aria-hidden="true">&times;</span>
+							<span aria-hidden="true">&times;</span>
 						</button>
 						<div class="container">
-								<div class="jumbotron text-center" style="padding:30px; margin:30px">
-										<h1 class="display-3">M.A.RL.I.E. (v2.0)</h1>
-										<h4>Multilayered Annotated ReLighting Images Explorer</h4>
-									</div>
-															<div class="row">
-								<p>This is a demostrative software of the paper <b>"<a href="https://albertojaspe.net/publications/2019-GCH-marlie.html">Web-based Multi-layered Exploration of Annotated Image-based Shape and Material Models</a></b>", by Alberto Jaspe-Villanueva, Ruggero Pintus, Andrea Giachetti and Enrico Gobbetti.
-									It is presented at the 16th Eurographics Workshop on Graphics and Cultural Heritage (GCH), in November 2019 at Sarajevo.</p>
-								<p>More information and download of the software at <a href="http://github.com/.html">MARLIE's about website</a>. For technical details or bug reports contact <a href="mailto:ajaspe@gmail.com">ajaspe@crs4.it</a></p>
-								<p class="text-muted"><small>The project received funding from SardinianRegional Authorities under projects VIGECLAB and TDM (POR FESR 2014-2020 Action 1.2.2).</small></p>
+							<div class="jumbotron text-center" style="padding:30px; margin:30px">
+								<h1 class="display-3">M.A.RL.I.E. (v2.0)</h1>
+								<h4>Multilayered Annotated ReLighting Images Explorer</h4>
+							</div>
+							<div class="row">
+								<p>This is a demostrative software of the paper <b>"<a
+											href="https://albertojaspe.net/publications/2019-GCH-marlie.html">Web-based
+											Multi-layered Exploration of Annotated Image-based Shape and Material
+											Models</a></b>", by Alberto Jaspe-Villanueva, Ruggero Pintus, Andrea
+									Giachetti and Enrico Gobbetti.
+									It is presented at the 16th Eurographics Workshop on Graphics and Cultural Heritage
+									(GCH), in November 2019 at Sarajevo.</p>
+								<p>More information and download of the software at <a
+										href="http://github.com/.html">MARLIE's about website</a>. For technical details
+									or bug reports contact <a href="mailto:ajaspe@gmail.com">ajaspe@crs4.it</a></p>
+								<p class="text-muted"><small>The project received funding from SardinianRegional
+										Authorities under projects VIGECLAB and TDM (POR FESR 2014-2020 Action
+										1.2.2).</small></p>
 							</div>
 							<div class="row justify-content-md-center">
-								<a href="http://vic.crs4.it"><img size="250px" alt="Visual Computing :: CRS4" src="img/vic.jpg"></a>
+								<a href="http://vic.crs4.it"><img size="250px" alt="Visual Computing :: CRS4"
+										src="img/vic.jpg"></a>
 							</div>
 						</div>
 					</div>

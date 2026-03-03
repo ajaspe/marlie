@@ -5,7 +5,7 @@ class Renderer {
 
 	constructor(canvas) {
 		this.canvas = canvas;
-		this.gl = null;	
+		this.gl = null;
 		this.shader = null;
 		this.program = null;
 		this.initTimeMark = 0;
@@ -16,13 +16,13 @@ class Renderer {
 		this.shaderFragSrc = null;
 		this.shaderFrag = null;
 		this.shaderVert = null;
-		this.imgDims = {width: 1, height: 1};
+		this.imgDims = { width: 1, height: 1 };
 		this.maxTexSize = 0;
 		this.texturesPool = new Map();
 		this.cam = {
 			zoomScale: 1.0,
-			panTranslation: [0,0],
-			zoomLimits: {min: 0.0, max: 6.0}
+			panTranslation: [0, 0],
+			zoomLimits: { min: 0.0, max: 6.0 }
 		};
 		this.matrices = {
 			model: mat4.create(),
@@ -37,7 +37,7 @@ class Renderer {
 		this.stdShaderFragWebGL1Src = "#version 100 \n precision highp float; \n precision highp int; \n varying vec2 vTexCoord; \n void main() { gl_FragColor = vec4(gl_FragCoord.xy/1024.0, 0.0, 1.0); }";
 		this.stdShaderVertWebGL2Src = "#version 300 es \n precision highp float; \n precision highp int; \n in vec4 aPosition; \n uniform mat4 uMatrix; \n out vec2 vTexCoord; \n void main() { gl_Position = uMatrix * aPosition; vTexCoord = aPosition.xy; }";
 		this.stdShaderFragWebGL2Src = "#version 300 es \n precision highp float; \n precision highp int; \n in vec2 vTexCoord; \n out vec4 fragColor; \n void main() { fragColor = vec4(gl_FragCoord.xy/1024.0, 0.0, 1.0); }";
-		
+
 		try {
 			this.gl = this.canvas.getContext("webgl2", { antialias: false, FXAA: false, premultipliedAlpha: false, preserveDrawingBuffer: true });
 		} catch (e) {
@@ -54,15 +54,15 @@ class Renderer {
 
 	updateInitViewMatrix() {
 		let fittingScale = 1.0;
-		let fittingTranslate = [ 0, 0 ];
-		if(this.imgDims.width/this.imgDims.height > this.canvas.clientWidth/this.canvas.clientHeight) {
+		let fittingTranslate = [0, 0];
+		if (this.imgDims.width / this.imgDims.height > this.canvas.clientWidth / this.canvas.clientHeight) {
 			fittingScale = this.canvas.clientWidth / this.imgDims.width;
 			fittingTranslate[0] = 0;
-			fittingTranslate[1] = (this.canvas.clientHeight - fittingScale*this.imgDims.height) / 2.0;
+			fittingTranslate[1] = (this.canvas.clientHeight - fittingScale * this.imgDims.height) / 2.0;
 		} else {
 			fittingScale = this.canvas.clientHeight / this.imgDims.height;
 			fittingTranslate[1] = 0;
-			fittingTranslate[0] = (this.canvas.clientWidth - fittingScale*this.imgDims.width) / 2.0;
+			fittingTranslate[0] = (this.canvas.clientWidth - fittingScale * this.imgDims.width) / 2.0;
 		}
 		mat4.fromTranslation(this.matrices.initView, [fittingTranslate[0], fittingTranslate[1], 0]);
 		mat4.scale(this.matrices.initView, this.matrices.initView, [fittingScale, fittingScale, 1, 1]);
@@ -89,12 +89,12 @@ class Renderer {
 		let c1 = vec4.fromValues(this.imgDims.width, this.imgDims.height, 0, 1);
 		vec4.transformMat4(c0, c0, this.matrices.view);
 		vec4.transformMat4(c1, c1, this.matrices.view);
-		const ratio = this.imgDims.width/(c1[0]-c0[0]);
-		const mipLevel =  Math.ceil(Math.log2(ratio)+0.5)-1;
-		return Math.max(0,mipLevel);
+		const ratio = this.imgDims.width / (c1[0] - c0[0]);
+		const mipLevel = Math.ceil(Math.log2(ratio) + 0.5) - 1;
+		return Math.max(0, mipLevel);
 	}
-   
-	canvasCoordsToImage(x,y) {
+
+	canvasCoordsToImage(x, y) {
 		let k = vec4.fromValues(x, y, 0, 1);
 		let vInv = mat4.create();
 		mat4.invert(vInv, this.matrices.view);
@@ -102,13 +102,19 @@ class Renderer {
 		return [k[0], k[1]];
 	}
 
+	imageCoordsToCanvas(x, y) {
+		let k = vec4.fromValues(x, y, 0, 1);
+		vec4.transformMat4(k, k, this.matrices.view);
+		return [k[0], k[1]];
+	}
+
 	zoom(dScale, x, y, relative = true) {
-		let newZoomScale = relative ? this.cam.zoomScale+dScale : dScale;
-		if( newZoomScale >= this.cam.zoomLimits.min && newZoomScale <= this.cam.zoomLimits.max) {
+		let newZoomScale = relative ? this.cam.zoomScale + dScale : dScale;
+		if (newZoomScale >= this.cam.zoomLimits.min && newZoomScale <= this.cam.zoomLimits.max) {
 			this.cam.zoomScale = newZoomScale;
-			let k = this.canvasCoordsToImage(x,y);
+			let k = this.canvasCoordsToImage(x, y);
 			mat4.translate(this.matrices.view, this.matrices.view, [k[0], k[1], 0]);
-			mat4.scale(this.matrices.view, this.matrices.view, [1.0+dScale, 1.0+dScale, 1, 1]);
+			mat4.scale(this.matrices.view, this.matrices.view, [1.0 + dScale, 1.0 + dScale, 1, 1]);
 			mat4.translate(this.matrices.view, this.matrices.view, [-k[0], -k[1], 0]);
 			this.uploadMVP();
 		}
@@ -117,7 +123,7 @@ class Renderer {
 	pan(dx, dy) {
 		let t = vec3.create();
 		mat4.getTranslation(t, this.matrices.view);
-		const k = this.canvasCoordsToImage(dx+t[0], dy+t[1]);
+		const k = this.canvasCoordsToImage(dx + t[0], dy + t[1]);
 		mat4.translate(this.matrices.view, this.matrices.view, [k[0], k[1], 0]);
 		this.uploadMVP();
 	}
@@ -128,11 +134,11 @@ class Renderer {
 		gl.enable(gl.BLEND);
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 		this.shaderFragSrc = this.stdShaderFragWebGL2Src;
-		if(!this._compileAndSetProgram(this.shaderFragSrc)) return false;
+		if (!this._compileAndSetProgram(this.shaderFragSrc)) return false;
 
 		const trisVerticesGLBuf = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, trisVerticesGLBuf);
-		const trisVertices = [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1];	
+		const trisVertices = [0, 0, 0, 1, 1, 0, 1, 0, 0, 1, 1, 1];
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(trisVertices), gl.STATIC_DRAW);
 
 		const positionAttr = gl.getAttribLocation(this.program, "aPosition");
@@ -159,31 +165,31 @@ class Renderer {
 	}
 
 	getViewport() {
-		let left_top = this.canvasCoordsToImage(0,0);
-		let right_bottom = this.canvasCoordsToImage(this.canvas.width,this.canvas.height);
+		let left_top = this.canvasCoordsToImage(0, 0);
+		let right_bottom = this.canvasCoordsToImage(this.canvas.width, this.canvas.height);
 		return [left_top[0], right_bottom[0], left_top[1], right_bottom[1]];
 	}
 
 	updateDefineAndCompile(name, value, type = 'string') {
 		let nPosDefine = this.shaderFragSrc.indexOf(`#define ${name} `);
 		let nPosDefineEnd = this.shaderFragSrc.indexOf('\n', nPosDefine);
-		
-		if(nPosDefineEnd <= nPosDefine) {
+
+		if (nPosDefineEnd <= nPosDefine) {
 			console.warn(`Renderer: Define ${name} not found`)
 			return;
 		}
 
 		let valueStr;
-		if(type == 'int') valueStr = Math.round(value);
-		else if(type == 'float') valueStr = Number(value).toFixed(5);
-		else if(type == 'string') valueStr = value;
-		else if(type == 'bool') valueStr = value ? "true" : "false";
+		if (type == 'int') valueStr = Math.round(value);
+		else if (type == 'float') valueStr = Number(value).toFixed(5);
+		else if (type == 'string') valueStr = value;
+		else if (type == 'bool') valueStr = value ? "true" : "false";
 		else {
 			console.warn(`Renderer: I dont understand type "${type}" for define`);
 			return;
 		}
 
-		this.shaderFragSrc = this.shaderFragSrc.slice(0,nPosDefine) + `#define ${name} (${valueStr})\n` + this.shaderFragSrc.slice(nPosDefineEnd);
+		this.shaderFragSrc = this.shaderFragSrc.slice(0, nPosDefine) + `#define ${name} (${valueStr})\n` + this.shaderFragSrc.slice(nPosDefineEnd);
 		this._reCompileFrag(this.shaderFragSrc);
 	}
 
@@ -207,10 +213,10 @@ class Renderer {
 		this.uploadMVP();
 	}
 
-	getAttribID(attrName) {	
-		if(attrName in this.attributeIds)
+	getAttribID(attrName) {
+		if (attrName in this.attributeIds)
 			return this.attributeIds[attrName];
-		
+
 		const id = this.gl.getUniformLocation(this.program, attrName);
 		if (id == null) {
 			console.warn("WARNING: Attribute " + attrName + " not found or not used!");
@@ -221,7 +227,7 @@ class Renderer {
 	}
 
 	clearAllTextures() {
-		this.texturesPool.forEach( (val, idx) => { this.gl.deleteTexture(val);  } );
+		this.texturesPool.forEach((val, idx) => { this.gl.deleteTexture(val); });
 		this.texturesPool.clear();
 	}
 
@@ -233,25 +239,25 @@ class Renderer {
 		gl.activeTexture(gl.TEXTURE0 + texNum);
 
 		if (!this.texturesPool.has(texNum)) {
-			 this.texturesPool.set(texNum, gl.createTexture());
-		} 
-		
+			this.texturesPool.set(texNum, gl.createTexture());
+		}
+
 		gl.bindTexture(gl.TEXTURE_2D, this.texturesPool.get(texNum));
-		
+
 		let texFormat;
-		if(nChannels == 1) texFormat = gl.LUMINANCE;
-		else if(nChannels == 3) texFormat = gl.RGB;
-		else if(nChannels == 4) texFormat = gl.RGBA;
+		if (nChannels == 1) texFormat = gl.LUMINANCE;
+		else if (nChannels == 3) texFormat = gl.RGB;
+		else if (nChannels == 4) texFormat = gl.RGBA;
 		else console.warn(`I donnot support ${nChannels}`);
 
 		gl.texImage2D(gl.TEXTURE_2D, mipLevel, texFormat, texFormat, gl.UNSIGNED_BYTE, img);
 
-		if(genMipmaps) gl.generateMipmap(gl.TEXTURE_2D);
+		if (genMipmaps) gl.generateMipmap(gl.TEXTURE_2D);
 		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, trilinear ? gl.LINEAR_MIPMAP_LINEAR : gl.LINEAR_MIPMAP_NEAREST);
 
-		if(!genMipmaps) {
-			const maxLev = gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_MAX_LEVEL); 
-			if(maxLev < mipLevel || maxLev === 1000 )
+		if (!genMipmaps) {
+			const maxLev = gl.getTexParameter(gl.TEXTURE_2D, gl.TEXTURE_MAX_LEVEL);
+			if (maxLev < mipLevel || maxLev === 1000)
 				gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAX_LEVEL, mipLevel);
 		}
 
@@ -268,9 +274,9 @@ class Renderer {
 		gl.activeTexture(gl.TEXTURE0 + texNum);
 
 		if (!this.texturesPool.has(texNum)) {
-			 this.texturesPool.set(texNum, gl.createTexture());
-		} 
-		
+			this.texturesPool.set(texNum, gl.createTexture());
+		}
+
 		gl.bindTexture(gl.TEXTURE_2D, this.texturesPool.get(texNum));
 
 		ktx.loadTexture(gl, true);
@@ -311,7 +317,7 @@ class Renderer {
 			console.error("Vertex compilation error");
 			console.error(gl.getShaderInfoLog(this.shaderVert));
 			return false;
-		} 
+		}
 		// Fragment shader compilation, WITH ERROR CONTROL
 		this.shaderFrag = gl.createShader(gl.FRAGMENT_SHADER);
 		gl.shaderSource(this.shaderFrag, shaderFragSrc);

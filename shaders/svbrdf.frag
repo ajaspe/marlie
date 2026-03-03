@@ -141,7 +141,7 @@ void main() {
 		return;
 	}
 	
-	vec3 L = (uLightInfo.w == 0.0) ? normalize(uLightInfo.xyz) : normalize(uLightInfo.xyz - gl_FragCoord.xyz);
+	vec3 L = (uLightInfo.w == 0.0) ? normalize(uLightInfo.xyz) : normalize(uLightInfo.xyz - vec3(gl_FragCoord.xy, 0.f));
 	vec3 V = vec3(0.0,0.0,1.0);
     vec3 H = normalize(L + V);
 

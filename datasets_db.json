@@ -1,7 +1,14 @@
-{ 	
-	"Demetrios": "datasets\\demetrios",
-	"Ghiberti": "datasets\\ghiberti",
-	"Fattori": "datasets\\fattori",
-	"Monteprama": "datasets\\monteprama",
-	"MARLIE Test Dataset": "datasets\\test"
+{
+	"Demetrios": "datasets/demetrios",
+	"Ghiberti": "datasets/ghiberti",
+	"Fattori": "datasets/fattori",
+	"Monteprama": "datasets/monteprama",
+	"MARLIE Test Dataset": "datasets/test",
+	"Gegeto": "datasets/gegeto_lptm_marlie",
+	"Nivola Mural 0": "datasets/nivola_mural_00",
+	"Nivola Mural 1": "datasets/nivola_mural_01",
+	"Nivola Mural 2": "datasets/nivola_mural_02",
+	"Nivola Mural 3": "datasets/nivola_mural_03",
+	"Cats": "datasets/cats",
+	"Cats2": "datasets/cats2"
 }
