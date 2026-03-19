@@ -654,6 +654,15 @@ function initUI() {
 				}
 				cleanResult = cleanResult.trim();
 
+				// Strip array wrapping brackets if model returned the JSON as an array element
+				if (cleanResult.startsWith("[")) {
+					cleanResult = cleanResult.substring(1);
+				}
+				if (cleanResult.endsWith("]")) {
+					cleanResult = cleanResult.slice(0, -1);
+				}
+				cleanResult = cleanResult.trim();
+
 				loadAIAnnotationsFromJSON(cleanResult, datasetViewMinX, datasetViewMinY, datasetViewMaxX, datasetViewMaxY);
 			} catch (parseError) {
 				console.error("Failed to parse Gemini JSON:", parseError);

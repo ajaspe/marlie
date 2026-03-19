@@ -249,237 +249,234 @@
 									style="width:80%;" value="ScreenShot">
 								<input type="button" class="btn btn-success	 btn-xs" id="createAnnotationButton"
 									style="width:80%;" value="Annotate">
-								<div class="dropdown-divider"></div>
-								AI Tools
-								<input type="button" class="btn btn-info btn-xs" id="askAIButton" style="width:80%;"
-									value="Ask AI">
 							</center>
 						</div>
 					</div>
 
 				</div>
-
+				<br>
+				<center>
+					<input type="button" class="btn btn-info btn-xs" id="askAIButton"
+						style="width:100%; height: 40px; font-weight: bold;" value="Ask AI ✧">
+				</center>
 
 			</div>
 
-			<div id="loading"
-				style="position: absolute; width: 10%; height: 10%; left: 50%; top: 50%; margin-left:-5%; margin-top:-5%; z-index: 10;">
-				<img width="100%" src="img/loading.gif"></img>
-			</div>
 
-			<div
-				style="position: absolute; width: 50px; height: 20px; text-align: right; right: 4px; top: 2px; z-index: 10;">
-				<font id="fps" size="3" color="white" style="text-shadow: 2px 2px #000;"></font>
-			</div>
+	</div>
 
-			<div
-				style="position: absolute; height: 18px; width: 40%; left:30%; text-align: center; bottom: 10px; z-index: 10;">
-				<a data-toggle="modal" data-target="#infoModal" href="#">
-					<font size="4" style="text-shadow: 2px 2px #000; font-family:Tahoma, Geneva, sans-serif">
-						M.A.RL.I.E.
-					</font>
-				</a>
-			</div>
+	<div id="loading"
+		style="position: absolute; width: 10%; height: 10%; left: 50%; top: 50%; margin-left:-5%; margin-top:-5%; z-index: 10;">
+		<img width="100%" src="img/loading.gif"></img>
+	</div>
 
-		</span>
-		<!-- Modal -->
-		<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog"
-			aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="longInfoTitle">Information</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div id="longInfoBody" class="modal-body">
-						Long Info Body
-					</div>
+	<div style="position: absolute; width: 50px; height: 20px; text-align: right; right: 4px; top: 2px; z-index: 10;">
+		<font id="fps" size="3" color="white" style="text-shadow: 2px 2px #000;"></font>
+	</div>
+
+	<div style="position: absolute; height: 18px; width: 40%; left:30%; text-align: center; bottom: 10px; z-index: 10;">
+		<a data-toggle="modal" data-target="#infoModal" href="#">
+			<font size="4" style="text-shadow: 2px 2px #000; font-family:Tahoma, Geneva, sans-serif">
+				M.A.RL.I.E.
+			</font>
+		</a>
+	</div>
+
+	</span>
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="longInfoTitle">Information</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div id="longInfoBody" class="modal-body">
+					Long Info Body
 				</div>
 			</div>
 		</div>
+	</div>
 
-		<!-- AI Modal -->
-		<div class="modal fade" id="aiModal" tabindex="-1" role="dialog" aria-labelledby="aiModalTitle"
-			aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-header">
-						<h5 class="modal-title" id="aiModalTitle">Ask Gemini AI</h5>
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-					</div>
-					<div class="modal-body">
-						<div id="aiKeyInputSection">
-							<p>Please enter your Gemini API Key. It will be stored in your browser.</p>
-							<input type="password" id="geminiKeyInput" class="form-control"
-								placeholder="Enter Gemini API Key">
-							<br>
-							<button type="button" id="saveKeyButton" class="btn btn-primary btn-block">Save Key</button>
-						</div>
-						<div id="aiInteractionSection" style="display:none;">
-							<center>
-								<div class="row text-center mb-3">
-									<div class="col-4 mb-3">
-										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
-											<strong>Standard View</strong>
-										</div>
-										<img id="aiImagePreview"
-											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
-										<div class="custom-control custom-checkbox mt-2">
-											<input type="checkbox" class="custom-control-input" id="sendRgbToggle"
-												checked>
-											<label class="custom-control-label" for="sendRgbToggle">Send</label>
-										</div>
-									</div>
-									<div class="col-4 mb-3">
-										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
-											<strong>Normal Map</strong>
-										</div>
-										<img id="aiNormalMapPreview"
-											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
-										<div class="custom-control custom-checkbox mt-2">
-											<input type="checkbox" class="custom-control-input" id="sendNormalToggle"
-												checked>
-											<label class="custom-control-label" for="sendNormalToggle">Send</label>
-										</div>
-									</div>
-									<div class="col-4 mb-3">
-										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
-											<strong>North Light</strong>
-										</div>
-										<img id="aiNorthPreview"
-											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
-										<div class="custom-control custom-checkbox mt-2">
-											<input type="checkbox" class="custom-control-input" id="sendNorthToggle"
-												checked>
-											<label class="custom-control-label" for="sendNorthToggle">Send</label>
-										</div>
-									</div>
-									<div class="col-4 mb-2">
-										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;"><strong>East
-												Light</strong></div>
-										<img id="aiEastPreview"
-											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
-										<div class="custom-control custom-checkbox mt-2">
-											<input type="checkbox" class="custom-control-input" id="sendEastToggle"
-												checked>
-											<label class="custom-control-label" for="sendEastToggle">Send</label>
-										</div>
-									</div>
-									<div class="col-4 mb-2">
-										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
-											<strong>South Light</strong>
-										</div>
-										<img id="aiSouthPreview"
-											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
-										<div class="custom-control custom-checkbox mt-2">
-											<input type="checkbox" class="custom-control-input" id="sendSouthToggle"
-												checked>
-											<label class="custom-control-label" for="sendSouthToggle">Send</label>
-										</div>
-									</div>
-									<div class="col-4 mb-2">
-										<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;"><strong>West
-												Light</strong></div>
-										<img id="aiWestPreview"
-											style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
-										<div class="custom-control custom-checkbox mt-2">
-											<input type="checkbox" class="custom-control-input" id="sendWestToggle"
-												checked>
-											<label class="custom-control-label" for="sendWestToggle">Send</label>
-										</div>
-									</div>
-								</div>
-							</center>
-							<div class="form-group">
-								<label for="aiCorpusInput">Attach Corpus JSON (optional):</label>
-								<input type="file" id="aiCorpusInput" accept=".json" class="form-control-file">
-							</div>
-							<div class="form-group">
-								<label for="aiModelSelect">Model:</label>
-								<select class="form-control" id="aiModelSelect"></select>
-							</div>
-							<div class="form-group">
-								<label for="aiPromptInput">Prompt:</label>
-								<textarea class="form-control" id="aiPromptInput"
-									rows="2">Analyze this material and describe its visual properties.</textarea>
-							</div>
-							<button type="button" id="sendToAIButton" class="btn btn-success btn-block">Analyze
-								View</button>
-							<hr>
-							<div id="aiLoading" style="display:none; text-align:center;">
-								<img src="img/loading.gif" height="50px"> Analyzing...
-							</div>
-							<div id="aiResult" style="margin-top:10px; max-height: 300px; overflow-y: auto;"></div>
-							<button type="button" id="changeKeyButton" class="btn btn-outline-secondary btn-sm"
-								style="margin-top:15px; width:100%;">Change API Key</button>
-							<hr>
-							<div class="form-group" style="margin-top: 15px;">
-								<label for="aiDebugJsonInput"><small>Debug: Load Manual JSON</small></label>
-								<textarea class="form-control" id="aiDebugJsonInput" rows="2" style="font-size: 0.8rem;"
-									placeholder="Paste Gemini JSON response here to manually draw boxes"></textarea>
-								<button type="button" id="loadDebugJsonButton" class="btn btn-secondary btn-sm"
-									style="margin-top: 5px; width: 100%;">Load Debug JSON</button>
-							</div>
-
-							<hr>
-							<div class="form-group row align-items-center" style="margin-top: 15px;">
-								<div class="col-8">
-									<label for="aiAnnotationsToggle" class="mb-0" style="font-weight:bold;">Show
-										Generated Annotations</label>
-								</div>
-								<div class="col-4 text-right">
-									<input type="checkbox" id="aiAnnotationsToggle" data-toggle="toggle" data-on="ON"
-										data-off="OFF" data-onstyle="success" data-size="sm" checked>
-								</div>
-							</div>
-						</div>
-					</div>
+	<!-- AI Modal -->
+	<div class="modal fade" id="aiModal" tabindex="-1" role="dialog" aria-labelledby="aiModalTitle" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="aiModalTitle">Ask Gemini AI</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
 				</div>
-			</div>
-		</div>
+				<div class="modal-body">
+					<div id="aiKeyInputSection">
+						<p>Please enter your Gemini API Key. It will be stored in your browser.</p>
+						<input type="password" id="geminiKeyInput" class="form-control"
+							placeholder="Enter Gemini API Key">
+						<br>
+						<button type="button" id="saveKeyButton" class="btn btn-primary btn-block">Save Key</button>
+					</div>
+					<div id="aiInteractionSection" style="display:none;">
+						<center>
+							<div class="row text-center mb-3">
+								<div class="col-4 mb-3">
+									<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
+										<strong>Standard View</strong>
+									</div>
+									<img id="aiImagePreview"
+										style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+									<div class="custom-control custom-checkbox mt-2">
+										<input type="checkbox" class="custom-control-input" id="sendRgbToggle" checked>
+										<label class="custom-control-label" for="sendRgbToggle">Send</label>
+									</div>
+								</div>
+								<div class="col-4 mb-3">
+									<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
+										<strong>Normal Map</strong>
+									</div>
+									<img id="aiNormalMapPreview"
+										style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+									<div class="custom-control custom-checkbox mt-2">
+										<input type="checkbox" class="custom-control-input" id="sendNormalToggle"
+											checked>
+										<label class="custom-control-label" for="sendNormalToggle">Send</label>
+									</div>
+								</div>
+								<div class="col-4 mb-3">
+									<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
+										<strong>North Light</strong>
+									</div>
+									<img id="aiNorthPreview"
+										style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+									<div class="custom-control custom-checkbox mt-2">
+										<input type="checkbox" class="custom-control-input" id="sendNorthToggle"
+											checked>
+										<label class="custom-control-label" for="sendNorthToggle">Send</label>
+									</div>
+								</div>
+								<div class="col-4 mb-2">
+									<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;"><strong>East
+											Light</strong></div>
+									<img id="aiEastPreview"
+										style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+									<div class="custom-control custom-checkbox mt-2">
+										<input type="checkbox" class="custom-control-input" id="sendEastToggle" checked>
+										<label class="custom-control-label" for="sendEastToggle">Send</label>
+									</div>
+								</div>
+								<div class="col-4 mb-2">
+									<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;">
+										<strong>South Light</strong>
+									</div>
+									<img id="aiSouthPreview"
+										style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+									<div class="custom-control custom-checkbox mt-2">
+										<input type="checkbox" class="custom-control-input" id="sendSouthToggle"
+											checked>
+										<label class="custom-control-label" for="sendSouthToggle">Send</label>
+									</div>
+								</div>
+								<div class="col-4 mb-2">
+									<div style="font-size: 0.8rem; color: #6c757d; margin-bottom: 5px;"><strong>West
+											Light</strong></div>
+									<img id="aiWestPreview"
+										style="max-width: 100%; max-height: 100px; border: 1px solid #ccc; cursor: pointer;">
+									<div class="custom-control custom-checkbox mt-2">
+										<input type="checkbox" class="custom-control-input" id="sendWestToggle" checked>
+										<label class="custom-control-label" for="sendWestToggle">Send</label>
+									</div>
+								</div>
+							</div>
+						</center>
+						<div class="form-group">
+							<label for="aiCorpusInput">Attach Corpus JSON (optional):</label>
+							<input type="file" id="aiCorpusInput" accept=".json" class="form-control-file">
+						</div>
+						<div class="form-group">
+							<label for="aiModelSelect">Model:</label>
+							<select class="form-control" id="aiModelSelect"></select>
+						</div>
+						<div class="form-group">
+							<label for="aiPromptInput">Prompt:</label>
+							<textarea class="form-control" id="aiPromptInput"
+								rows="2">Analyze this material and describe its visual properties.</textarea>
+						</div>
+						<button type="button" id="sendToAIButton" class="btn btn-success btn-block">Analyze
+							View</button>
+						<hr>
+						<div id="aiLoading" style="display:none; text-align:center;">
+							<img src="img/loading.gif" height="50px"> Analyzing...
+						</div>
+						<div id="aiResult" style="margin-top:10px; max-height: 300px; overflow-y: auto;"></div>
+						<button type="button" id="changeKeyButton" class="btn btn-outline-secondary btn-sm"
+							style="margin-top:15px; width:100%;">Change API Key</button>
+						<hr>
+						<div class="form-group" style="margin-top: 15px;">
+							<label for="aiDebugJsonInput"><small>Debug: Load Manual JSON</small></label>
+							<textarea class="form-control" id="aiDebugJsonInput" rows="2" style="font-size: 0.8rem;"
+								placeholder="Paste Gemini JSON response here to manually draw boxes"></textarea>
+							<button type="button" id="loadDebugJsonButton" class="btn btn-secondary btn-sm"
+								style="margin-top: 5px; width: 100%;">Load Debug JSON</button>
+						</div>
 
-		<!-- Modal INFO -->
-		<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
-			aria-hidden="true">
-			<div class="modal-dialog" role="document">
-				<div class="modal-content">
-					<div class="modal-body">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
-						</button>
-						<div class="container">
-							<div class="jumbotron text-center" style="padding:30px; margin:30px">
-								<h1 class="display-3">M.A.RL.I.E. (v2.0)</h1>
-								<h4>Multilayered Annotated ReLighting Images Explorer</h4>
+						<hr>
+						<div class="form-group row align-items-center" style="margin-top: 15px;">
+							<div class="col-8">
+								<label for="aiAnnotationsToggle" class="mb-0" style="font-weight:bold;">Show
+									Generated Annotations</label>
 							</div>
-							<div class="row">
-								<p>This is a demostrative software of the paper <b>"<a
-											href="https://albertojaspe.net/publications/2019-GCH-marlie.html">Web-based
-											Multi-layered Exploration of Annotated Image-based Shape and Material
-											Models</a></b>", by Alberto Jaspe-Villanueva, Ruggero Pintus, Andrea
-									Giachetti and Enrico Gobbetti.
-									It is presented at the 16th Eurographics Workshop on Graphics and Cultural Heritage
-									(GCH), in November 2019 at Sarajevo.</p>
-								<p>More information and download of the software at <a
-										href="http://github.com/.html">MARLIE's about website</a>. For technical details
-									or bug reports contact <a href="mailto:ajaspe@gmail.com">ajaspe@crs4.it</a></p>
-								<p class="text-muted"><small>The project received funding from SardinianRegional
-										Authorities under projects VIGECLAB and TDM (POR FESR 2014-2020 Action
-										1.2.2).</small></p>
-							</div>
-							<div class="row justify-content-md-center">
-								<a href="http://vic.crs4.it"><img size="250px" alt="Visual Computing :: CRS4"
-										src="img/vic.jpg"></a>
+							<div class="col-4 text-right">
+								<input type="checkbox" id="aiAnnotationsToggle" data-toggle="toggle" data-on="ON"
+									data-off="OFF" data-onstyle="success" data-size="sm" checked>
 							</div>
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
+	</div>
+
+	<!-- Modal INFO -->
+	<div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="infoModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-body">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<div class="container">
+						<div class="jumbotron text-center" style="padding:30px; margin:30px">
+							<h1 class="display-3">M.A.RL.I.E. (v2.0)</h1>
+							<h4>Multilayered Annotated ReLighting Images Explorer</h4>
+						</div>
+						<div class="row">
+							<p>This is a demostrative software of the paper <b>"<a
+										href="https://albertojaspe.net/publications/2019-GCH-marlie.html">Web-based
+										Multi-layered Exploration of Annotated Image-based Shape and Material
+										Models</a></b>", by Alberto Jaspe-Villanueva, Ruggero Pintus, Andrea
+								Giachetti and Enrico Gobbetti.
+								It is presented at the 16th Eurographics Workshop on Graphics and Cultural Heritage
+								(GCH), in November 2019 at Sarajevo.</p>
+							<p>More information and download of the software at <a
+									href="http://github.com/.html">MARLIE's about website</a>. For technical details
+								or bug reports contact <a href="mailto:ajaspe@gmail.com">ajaspe@crs4.it</a></p>
+							<p class="text-muted"><small>The project received funding from SardinianRegional
+									Authorities under projects VIGECLAB and TDM (POR FESR 2014-2020 Action
+									1.2.2).</small></p>
+						</div>
+						<div class="row justify-content-md-center">
+							<a href="http://vic.crs4.it"><img size="250px" alt="Visual Computing :: CRS4"
+									src="img/vic.jpg"></a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	</div>
 </body>
 

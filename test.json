@@ -1,0 +1,90 @@
+
+{
+	"annotations": [
+		{
+			"ymin": 76,
+			"xmin": 395,
+			"ymax": 1000,
+			"xmax": 923,
+			"title": "A theme of the Mother",
+			"text": "In the seventies, Nivola began a series of scultptures entitled La madre sarda e il suo figlio meraviglioso (The Sardinian Mother and Her Marvellous Son) dealing with the theme of maternity."
+		}
+	]
+}
+
+{
+	"annotations": [
+		{
+			"ymin": 137,
+			"xmin": 196,
+			"ymax": 929,
+			"xmax": 838,
+			"title": "Bas-relief on modular concrete panels",
+			"text": "This abstract bas-relief mural is composed of multiple joined rectangular concrete panels, as indicated by the vertical seams visible across the standard view (image_0.png) and confirmed by slight relief differences in the raking light renders (image_2.png to image_5.png)."
+		},
+		{
+			"ymin": 197,
+			"xmin": 219,
+			"ymax": 611,
+			"xmax": 508,
+			"title": "Raised dotted border",
+			"text": "A continuous, slightly raised border defined by red dots frames the large kite-like geometric element on the left panel, visible in the normal map (image_1.png) and particularly under West (image_5.png) raking light."
+		},
+		{
+			"ymin": 166,
+			"xmin": 355,
+			"ymax": 363,
+			"xmax": 375,
+			"title": "Incised or low-relief colored stack",
+			"text": "This vertical column of colored rectangular segments set within the large left kite shape appears flat or slightly recessed in the normal map (image_1.png), relative to the raised dotted border."
+		},
+		{
+			"ymin": 201,
+			"xmin": 619,
+			"ymax": 276,
+			"xmax": 725,
+			"title": "Incised patterned block",
+			"text": "A rectangular area with a simple dotted pattern, located above the right-hand figure's stylized head, is clearly recessed into the concrete panel, appearing purple in the normal map (image_1.png)."
+		},
+		{
+			"ymin": 350,
+			"xmin": 562,
+			"ymax": 532,
+			"xmax": 730,
+			"title": "Shallow stylized face features",
+			"text": "Two tall, eye-shaped forms containing internal leaf motifs are lightly incised or painted on the surface, appearing mostly flat in the normal map (image_1.png)."
+		},
+		{
+			"ymin": 586,
+			"xmin": 566,
+			"ymax": 738,
+			"xmax": 719,
+			"title": "High-relief painted elements",
+			"text": "The central abstract composition on the body of the right figure features various layers of painted forms in green, yellow, and red that exhibit distinct high positive relief depth, showing prominently in the pink/yellow regions of the normal map (image_1.png)."
+		},
+		{
+			"ymin": 713,
+			"xmin": 303,
+			"ymax": 831,
+			"xmax": 427,
+			"title": "Raised organic painted shapes",
+			"text": "Within the bottom-left rectangular boundary, several yellow and white painted amoeba-like forms are in slight positive relief, as indicated by the normal map (image_1.png)."
+		},
+		{
+			"ymin": 753,
+			"xmin": 617,
+			"ymax": 912,
+			"xmax": 663,
+			"title": "Inlaid small squares",
+			"text": "A vertical 4x1 grid of small square tiles or blocks is set into the lower part of the right figure. The colored tiles (red and yellow) seem slightly lower than the main surface, while the others are flush, visible in the normal map (image_1.png)."
+		},
+		{
+			"ymin": 137,
+			"xmin": 196,
+			"ymax": 929,
+			"xmax": 838,
+			"title": "Pitted concrete surface texture",
+			"text": "All concrete surfaces display a rough, pitted texture resulting from the aggregate mix and casting process, uniformly visible as noise in the normal map (image_1.png) and highlighted from different angles in the raking light renders (image_2.png to image_5.png)."
+		}
+	]
+}
